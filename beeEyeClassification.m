@@ -13,7 +13,7 @@ close all
 
 %Operations
 saveData = 0; % Binary switch. 0: No (for testing). 1: Yes (for production run).
-manualMode = 1; % Binary switch. 0: No. 1: Yes.
+manualMode = 0; % Binary switch. 0: No. 1: Yes.
 
 HOME_DIR = '/home/ananth/Documents/beeEyeClassification';
 DATA_DIR = '/home/ananth/Desktop/sorted';
@@ -112,14 +112,45 @@ for topFolderNumber = 1:nCaseStudies
                     %3. Intensity based binarization
                     %image = imread(fullFilePath);
                     fig3 = figure(3);
-                    set(fig3,'Position', [1500, 1000, 200, 150]);
+                    set(fig3,'Position', [0, 0, 200, 150]);
                     clf
                     croppedImage = imcrop(image, crop);
                     imshow(croppedImage)
                     title(sprintf('Cropped with xmin = %d and ymin = %d', crop(1), crop(2)))
 
                     %4. Classification metrics
-
+                    % %Isolating channels - RED
+                    % croppedImage_red = croppedImage; %initializing
+                    % croppedImage_red(:, :, 2:3) = 0; %removing green and blue channels
+                    % 
+                    % %Isolating channels - GREEN
+                    % croppedImage_green = croppedImage; %initializing
+                    % %croppedImage_green(:, :, 1:2:3) = 0; %removing red and blue channels
+                    % croppedImage_green(:, :, 1) = 0; %removing red channel
+                    % croppedImage_green(:, :, 3) = 0; %removing blue channel
+                    % 
+                    % %Isolating channels - BLUE
+                    % croppedImage_blue = croppedImage; %initializing
+                    % croppedImage_blue(:, :, 1:2) = 0; %removing red and green channels
+                    % 
+                    % fig4 = figure(4);
+                    % set(fig4,'Position', [1500, 1000, 200, 150]);
+                    % clf
+                    % imshow(croppedImage_red)
+                    % title(sprintf('RED - Cropped with xmin = %d and ymin = %d', crop(1), crop(2)))
+                    % 
+                    % fig5 = figure(5);
+                    % set(fig5,'Position', [1500, 1000, 200, 150]);
+                    % clf
+                    % imshow(croppedImage_green)
+                    % title(sprintf('GREEN - Cropped with xmin = %d and ymin = %d', crop(1), crop(2)))
+                    % 
+                    % fig6 = figure(6);
+                    % set(fig6,'Position', [1500, 1000, 200, 150]);
+                    % clf
+                    % imshow(croppedImage_blue)
+                    % title(sprintf('BLUE - Cropped with xmin = %d and ymin = %d', crop(1), crop(2)))
+                    
                     disp('...... done!') %disp() is like a sprintf() but not as powerful.
                 end
             end
