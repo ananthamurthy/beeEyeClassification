@@ -112,45 +112,35 @@ for topFolderNumber = 1:nCaseStudies
                     %3. Intensity based binarization
                     %image = imread(fullFilePath);
                     fig3 = figure(3);
-                    set(fig3,'Position', [0, 0, 200, 150]);
+                    set(fig3,'Position', [0, 0, 1200, 800]);
                     clf
+                    subplot(1, 2, 1)
                     croppedImage = imcrop(image, crop);
                     imshow(croppedImage)
-                    title(sprintf('Cropped with xmin = %d and ymin = %d', crop(1), crop(2)))
+                    title(sprintf('Cropped Original | xmin = %d, ymin = %d', crop(1), crop(2)))
 
                     %4. Classification metrics
-                    % %Isolating channels - RED
-                    % croppedImage_red = croppedImage; %initializing
-                    % croppedImage_red(:, :, 2:3) = 0; %removing green and blue channels
-                    % 
-                    % %Isolating channels - GREEN
-                    % croppedImage_green = croppedImage; %initializing
-                    % %croppedImage_green(:, :, 1:2:3) = 0; %removing red and blue channels
-                    % croppedImage_green(:, :, 1) = 0; %removing red channel
-                    % croppedImage_green(:, :, 3) = 0; %removing blue channel
-                    % 
-                    % %Isolating channels - BLUE
-                    % croppedImage_blue = croppedImage; %initializing
-                    % croppedImage_blue(:, :, 1:2) = 0; %removing red and green channels
-                    % 
-                    % fig4 = figure(4);
-                    % set(fig4,'Position', [1500, 1000, 200, 150]);
-                    % clf
-                    % imshow(croppedImage_red)
-                    % title(sprintf('RED - Cropped with xmin = %d and ymin = %d', crop(1), crop(2)))
-                    % 
-                    % fig5 = figure(5);
-                    % set(fig5,'Position', [1500, 1000, 200, 150]);
-                    % clf
-                    % imshow(croppedImage_green)
-                    % title(sprintf('GREEN - Cropped with xmin = %d and ymin = %d', crop(1), crop(2)))
-                    % 
-                    % fig6 = figure(6);
-                    % set(fig6,'Position', [1500, 1000, 200, 150]);
-                    % clf
-                    % imshow(croppedImage_blue)
-                    % title(sprintf('BLUE - Cropped with xmin = %d and ymin = %d', crop(1), crop(2)))
-                    
+
+                    %Convert to grayscale
+                    croppedImage_grayscale = rgb2gray(croppedImage);
+                    subplot(1, 2, 2)
+                    imshow(croppedImage_grayscale)
+                    title(sprintf('Cropped Grayscale | xmin = %d, ymin = %d', crop(1), crop(2)))
+
+                    % %Split channels - just in case
+                    [croppedImage_red, croppedImage_green, croppedImage_blue] = splitColorChannels(croppedImage, crop, 1);
+
+                    %Binarize
+                    fig5 = figure(5);
+                    set(fig5, 'Position', [1000, 1000, 1200, 800])
+                    clf
+                    for sensitivityFactor = 0.1:0.1:1.0
+                        subplot(5, 2, sensitivityFactor*10)
+                        croppedImage_binarized = imbinarize(croppedImage_grayscale, ...
+                            "adaptive", "ForegroundPolarity", "bright", "Sensitivity", sensitivityFactor);
+                        imshow(croppedImage_binarized)
+                        title(sprintf('Cropped + Binarized | Sensitivity = %d', sensitivityFactor))
+                    end
                     disp('...... done!') %disp() is like a sprintf() but not as powerful.
                 end
             end
