@@ -12,8 +12,8 @@ clear
 close all
 
 %Operations
-saveData = 1; % Binary switch. 0: No (for testing). 1: Yes (for production run).
-manualMode = 0; % Binary switch. 0: No. 1: Yes.
+saveData = 0; % Binary switch. 0: No (for testing). 1: Yes (for production run).
+manualMode = 1; % Binary switch. 0: No. 1: Yes.
 
 HOME_DIR = '/home/ananth/Documents/beeEyeClassification';
 DATA_DIR = '/home/ananth/Desktop/sorted';
@@ -61,7 +61,7 @@ missingDatasets = [];
 
 for topFolderNumber = 1:nCaseStudies
     filepath = strcat(DATA_DIR, '/', sortedTitle{topFolderNumber}); %horizontal string concatenation [IMPORTANT: be careful for "/"s. Keep to one format.]
-    fprintf('[INFO] Now Analyzing Top Folder: %s%s ...\n', DATA_DIR, sortedTitle{topFolderNumber}) %Prints to console
+    fprintf('>>> [INFO] Now Analyzing Top Folder: %s/%s ...\n', DATA_DIR, sortedTitle{topFolderNumber}) %Prints to console
 
     %File specifics. One should ideally avoid nested loops with more than 3 levels,
     %but the following is foolproof.
@@ -80,7 +80,7 @@ for topFolderNumber = 1:nCaseStudies
                     % Analysis Section
                     %1. Load File
                     try
-                        image = double(imread(fullFilePath));
+                        image = imread(fullFilePath);
                         %Alternatively, we could use exist(fullFilePath,
                         %'dir') to check (might even be faster)
                     catch
@@ -93,6 +93,7 @@ for topFolderNumber = 1:nCaseStudies
 
                     %2. Crop for eye
                     if manualMode
+                        disp('>>> [INFO] Manual Mode: Find and save crop coordinates ...')
                         arguments.DATA_DIR = DATA_DIR;
                         arguments.filepath = filepath;
                         arguments.filename = filename;
@@ -102,6 +103,7 @@ for topFolderNumber = 1:nCaseStudies
                         arguments.saveData = saveData;
                         crop = getTheEyeCrop(arguments);
                     else
+                        disp('>>> [INFO] Loading crop parameters directly ...')
                         %load crop parameters from preliminary manual analysis.
                         load(strtrim(sprintf('%s/%s-cropParams.mat', ...
                             filepath, ...

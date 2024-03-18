@@ -1,11 +1,10 @@
-
 function crop = getTheEyeCrop(arguments)
 
 % For the current dataset
-fprintf('[INFO] Now Analyzing Top Folder: %s%s ...\n', arguments.DATA_DIR, arguments.sortedTitle{arguments.topFolderNumber}) %Prints to console
+%fprintf('>>> [INFO] Now Analyzing Top Folder: %s/%s ...\n', arguments.DATA_DIR, arguments.sortedTitle{arguments.topFolderNumber}) %Prints to console
 fullFilePath = strtrim(sprintf('%s/%s.jpg', arguments.filepath, arguments.filename));
 
-image = double(imread(fullFilePath));
+image = imread(fullFilePath);
 fig1 = figure(1);
 set(fig1,'Position', [0, 0, 1000, 400]);
 clf
@@ -63,6 +62,6 @@ while 1
         title(sprintf('Cropped with xmin = %i and ymin = %i', xmin, ymin))
     end
 end
-crop
+%crop
 end
 %disp('All Done!')
